@@ -62,6 +62,7 @@ object TimerManager {
         val bossbar = Bukkit.getBossBar(key)
 
         bossbar?.removeAll()
+        plugin.server.removeBossBar(key)
 
         plugin.server.broadcast(Component.text("${Plugin.prefix} Timer ${ChatColor.GREEN}\"${title}\"${ChatColor.RESET} stopped!"))
         plugin.server.onlinePlayers.forEach { it.playSound(it, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f) }
