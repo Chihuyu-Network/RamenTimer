@@ -6,7 +6,7 @@ import dev.jorel.commandapi.arguments.GreedyStringArgument
 import dev.jorel.commandapi.executors.CommandExecutor
 import love.chihuyu.Plugin.Companion.prefix
 import love.chihuyu.TimerManager
-import love.chihuyu.data.TaskStorage
+import love.chihuyu.data.TimerStorage
 import org.bukkit.ChatColor
 import java.util.concurrent.CompletableFuture
 
@@ -16,14 +16,17 @@ object TimerEnd {
         .withPermission("ramentimer.end")
         .withArguments(GreedyStringArgument("title").replaceSuggestions(ArgumentSuggestions.strings {
             CompletableFuture.supplyAsync {
-                TaskStorage.timers.keys.toTypedArray()
+                TimerStorage.timers.map { it.title }.toTypedArray()
             }.get()
         }))
         .executes(
             CommandExecutor { sender, args ->
                 val title = args[0] as String
 
-                if (title !in TaskStorage.timers) {
+                if (
+                    title !in TimerStorage.timers.map { it.title } &&
+                    (TimerStorage.getTimerOrNullByTitle(title)?.owner?.name == sender.name || sender.hasPermission("ramentimer.forceend"))
+                    ) {
                     sender.sendMessage("$prefix ${ChatColor.RED}Timer not found.")
                     return@CommandExecutor
                 }

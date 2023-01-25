@@ -1,5 +1,5 @@
 name: RamenTimer
-version: '1.0.1'
+version: '1.1.0'
 main: love.chihuyu.Plugin
 authors: [ Hirosuke ]
 depend: [CommandAPI]
